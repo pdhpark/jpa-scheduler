@@ -62,4 +62,10 @@ public class ScheduleService {
     public List<ScheduleResponseDto> getScheduleList(Pageable pageable) {
         return scheduleRepository.findAllByOrderByModifiedAtDesc(pageable).stream().map(ScheduleResponseDto::new).toList();
     }
+
+    public Long deleteSchedule(Long id) {
+        Schedule schedule = find(id);
+        scheduleRepository.delete(schedule);
+        return id;
+    }
 }

@@ -43,6 +43,6 @@ public class Schedule extends Timestamped {
         this.contents = requestDto.getContents();
     }
 
-    @OneToMany(mappedBy = "schedule")
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.REMOVE)
     private List<Comments> commentsList = new ArrayList<>();
 }
