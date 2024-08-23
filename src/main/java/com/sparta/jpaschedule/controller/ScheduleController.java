@@ -4,8 +4,12 @@ import com.sparta.jpaschedule.dto.ScheduleRequestDto;
 import com.sparta.jpaschedule.dto.ScheduleResponseDto;
 import com.sparta.jpaschedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Transactional
@@ -25,6 +29,13 @@ public class ScheduleController {
     @GetMapping("/{id}")
     public ScheduleResponseDto getSchedule(@PathVariable Long id) {
         return scheduleService.getSchedule(id);
+    }
+
+    //일정 다건조회
+    @GetMapping
+    public List<ScheduleResponseDto> getScheduleList(@RequestParam Integer page, @RequestParam(defaultValue = "10") Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return scheduleService.getScheduleList(pageable);
     }
 
     //일정 수정

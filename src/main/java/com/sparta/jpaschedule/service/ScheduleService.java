@@ -5,8 +5,11 @@ import com.sparta.jpaschedule.dto.ScheduleResponseDto;
 import com.sparta.jpaschedule.entity.Schedule;
 import com.sparta.jpaschedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +42,7 @@ public class ScheduleService {
     }
 
     //일정 수정
-    @Transactional
+    //Class에 Transactional이 걸려있기때문에 제거해도됐었음
     public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto) {
         //id에 해당하는 entity 찾기
         Schedule schedule = find(id);
@@ -52,7 +55,11 @@ public class ScheduleService {
         return responseDto;
     }
 
-    private Schedule find(Long id) {
+    public Schedule find(Long id) {
         return scheduleRepository.findById(id).orElseThrow();
+    }
+
+    public List<ScheduleResponseDto> getScheduleList(Pageable pageable) {
+        return scheduleRepository.findAllByOrderByModifiedAtDesc(pageable).stream().map(ScheduleResponseDto::new).toList();
     }
 }
