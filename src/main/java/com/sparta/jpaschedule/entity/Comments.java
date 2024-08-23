@@ -1,22 +1,19 @@
 package com.sparta.jpaschedule.entity;
 
-import com.sparta.jpaschedule.dto.ScheduleRequestDto;
+import com.sparta.jpaschedule.dto.CommentsRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "schedule")
-public class Schedule extends Timestamped {
+@Table(name = "comments")
+public class Comments extends Timestamped{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,23 +23,19 @@ public class Schedule extends Timestamped {
     private String username;
 
     @Column(nullable = false)
-    private String title;
-
-    @Column(nullable = false)
     private String contents;
 
-    public Schedule(ScheduleRequestDto requestDto) {
+    @ManyToOne
+    @JoinColumn(name = "schedule_id")
+    private Schedule schedule;
+
+    public Comments(CommentsRequestDto requestDto) {
         this.username = requestDto.getUsername();
-        this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
     }
 
-    public void update(ScheduleRequestDto requestDto) {
+    public void update(CommentsRequestDto requestDto) {
         this.username = requestDto.getUsername();
-        this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
     }
-
-    @OneToMany(mappedBy = "schedule")
-    private List<Comments> commentsList = new ArrayList<>();
 }
