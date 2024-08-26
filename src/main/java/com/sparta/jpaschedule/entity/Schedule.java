@@ -23,7 +23,7 @@ public class Schedule extends Timestamped {
     private Long id;
 
     @Column(nullable = false)
-    private String username;
+    private Long user_id;
 
     @Column(nullable = false)
     private String title;
@@ -32,17 +32,20 @@ public class Schedule extends Timestamped {
     private String contents;
 
     public Schedule(ScheduleRequestDto requestDto) {
-        this.username = requestDto.getUsername();
+        this.user_id = requestDto.getUser_id();
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
     }
 
     public void update(ScheduleRequestDto requestDto) {
-        this.username = requestDto.getUsername();
+        //수정시 service에서 작성자 id가 같은지 확인하는 로직으로 인해 필요없는 코드소스 제거
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
     }
 
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.REMOVE)
     private List<Comments> commentsList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "schedule")
+    private List<Register> registerList = new ArrayList<>();
 }
