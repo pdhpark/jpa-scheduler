@@ -55,8 +55,10 @@ public class ScheduleService {
         //id에 해당하는 entity 찾기
         Schedule schedule = find(id);
 
+        List<Register> list = registerRepository.findAllBySchedule_Id(id);
+
         //ResponseDto에 담아 반환(GET)
-        ScheduleResponseDto responseDto = new ScheduleResponseDto(schedule);
+        ScheduleResponseDto responseDto = new ScheduleResponseDto(schedule, list);
         return responseDto;
     }
 
