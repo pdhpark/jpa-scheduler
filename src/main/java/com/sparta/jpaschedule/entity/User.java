@@ -28,10 +28,19 @@ public class User extends Timestamped{
     @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
+    private String password;
+
 
     public User(UserRequestDto requestDto) {
         this.username = requestDto.getUsername();
         this.email = requestDto.getEmail();
+    }
+
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
     }
 
     public void update(UserRequestDto requestDto) {

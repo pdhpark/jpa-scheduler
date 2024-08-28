@@ -29,3 +29,4 @@ create table register
 );
 
 alter table schedule change username_id user_id bigint;
+alter table user add column password varchar(100) not null;

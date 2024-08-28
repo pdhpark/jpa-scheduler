@@ -1,25 +1,45 @@
 package com.sparta.jpaschedule.service;
 
+import com.sparta.jpaschedule.config.PasswordEncoder;
 import com.sparta.jpaschedule.dto.UserRequestDto;
 import com.sparta.jpaschedule.dto.UserResponseDto;
 import com.sparta.jpaschedule.entity.User;
+import com.sparta.jpaschedule.jwt.JwtUtil;
 import com.sparta.jpaschedule.repository.UserRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
+    private final HttpServletResponse res;
 
     public UserResponseDto createUser(UserRequestDto requestDto) {
-        User user = new User(requestDto);
-        User saveUser = userRepository.save(user);
-        UserResponseDto responseDto = new UserResponseDto(saveUser);
+        String username = requestDto.getUsername();
+        String password = passwordEncoder.encode(requestDto.getPassword());
+
+        String email = requestDto.getEmail();
+        Optional<User> checkEmail = userRepository.findByEmail(email);
+        if (checkEmail.isPresent()) {
+            throw new IllegalArgumentException("중복된 Email 입니다.");
+        }
+
+        User user = new User(username, password, email);
+
+        userRepository.save(user);
+        UserResponseDto responseDto = new UserResponseDto(user);
+
+        String token = jwtUtil.createToken(email);
+        jwtUtil.addJwtToCookie(token, res);
         return responseDto;
     }
 
