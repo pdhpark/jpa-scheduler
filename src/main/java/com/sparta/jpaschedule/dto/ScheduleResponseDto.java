@@ -2,6 +2,7 @@ package com.sparta.jpaschedule.dto;
 
 import com.sparta.jpaschedule.entity.Register;
 import com.sparta.jpaschedule.entity.Schedule;
+import com.sparta.jpaschedule.entity.UsersInfo;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -18,9 +19,7 @@ public class ScheduleResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private int commentscount;
-    private List<Long> users_id = new ArrayList<>();
-    private List<String> users_name = new ArrayList<>();
-    private List<String> emails = new ArrayList<>();
+    private List<UsersInfo> users_info = new ArrayList<>();
 
     public ScheduleResponseDto(Schedule schedule) {
         this.id = schedule.getId();
@@ -42,9 +41,11 @@ public class ScheduleResponseDto {
         this.commentscount = schedule.getCommentsList().size();
 
         for(int i=0; i<list.size(); i++) {
-            this.users_id.add(list.get(i).getUser().getId());
-            this.users_name.add(list.get(i).getUser().getUsername());
-            this.emails.add(list.get(i).getUser().getEmail());
+            this.users_info.add(new UsersInfo(
+                    list.get(i).getUser().getId(),
+                    list.get(i).getUser().getUsername(),
+                    list.get(i).getUser().getEmail())
+            );
         }
     }
 }

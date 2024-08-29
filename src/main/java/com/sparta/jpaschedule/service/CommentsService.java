@@ -34,13 +34,13 @@ public class CommentsService {
         Comments saveComments = commentsRepository.save(comments);
 
         //ResponseDto에 반환
-        CommentsResponseDto responseDto = new CommentsResponseDto(saveComments);
+        CommentsResponseDto responseDto = response(saveComments);
         return responseDto;
     }
 
     public CommentsResponseDto getComments(Long id) {
         Comments comments = find(id);
-        CommentsResponseDto responseDto = new CommentsResponseDto(comments);
+        CommentsResponseDto responseDto = response(comments);
         return responseDto;
     }
 
@@ -53,7 +53,7 @@ public class CommentsService {
     public CommentsResponseDto updateComments(Long id, CommentsRequestDto requestDto) {
         Comments comments = find(id);
         comments.update(requestDto);
-        CommentsResponseDto responseDto = new CommentsResponseDto(comments);
+        CommentsResponseDto responseDto = response(comments);
         return responseDto;
     }
 
@@ -65,5 +65,9 @@ public class CommentsService {
 
     private Comments find(Long id) {
         return commentsRepository.findById(id).orElseThrow();
+    }
+
+    private CommentsResponseDto response(Comments comments){
+        return new CommentsResponseDto(comments);
     }
 }

@@ -46,7 +46,7 @@ public class ScheduleService {
         Schedule saveSchedule = scheduleRepository.save(schedule);
 
         //ResponseDto에 담아 반환
-        ScheduleResponseDto responseDto = new ScheduleResponseDto(saveSchedule);
+        ScheduleResponseDto responseDto = response(saveSchedule);
         return responseDto;
     }
 
@@ -77,7 +77,7 @@ public class ScheduleService {
         }
 
         //ResponseDto에 담아 반환
-        ScheduleResponseDto responseDto = new ScheduleResponseDto(schedule);
+        ScheduleResponseDto responseDto = response(schedule);
         return responseDto;
     }
 
@@ -93,5 +93,9 @@ public class ScheduleService {
         Schedule schedule = find(id);
         scheduleRepository.delete(schedule);
         return id;
+    }
+
+    private ScheduleResponseDto response(Schedule schedule){
+        return new ScheduleResponseDto(schedule);
     }
 }

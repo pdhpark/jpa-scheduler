@@ -36,7 +36,7 @@ public class UserService {
         User user = new User(username, password, email);
 
         userRepository.save(user);
-        UserResponseDto responseDto = new UserResponseDto(user);
+        UserResponseDto responseDto = response(user);
 
         String token = jwtUtil.createToken(email);
         jwtUtil.addJwtToCookie(token, res);
@@ -45,7 +45,7 @@ public class UserService {
 
     public UserResponseDto getUser(Long id) {
         User user = find(id);
-        UserResponseDto responseDto = new UserResponseDto(user);
+        UserResponseDto responseDto = response(user);
         return responseDto;
     }
 
@@ -57,7 +57,7 @@ public class UserService {
         User user = find(id);
         user.update(requestDto);
 
-        UserResponseDto responseDto = new UserResponseDto(user);
+        UserResponseDto responseDto = response(user);
         return responseDto;
     }
 
@@ -71,4 +71,7 @@ public class UserService {
         return userRepository.findById(id).orElseThrow();
     }
 
+    private UserResponseDto response(User user){
+        return new UserResponseDto(user);
+    }
 }
